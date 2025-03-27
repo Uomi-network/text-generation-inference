@@ -422,6 +422,7 @@ mod tests {
                     temperature: 0.0,
                     top_k: 0,
                     top_p: 0.0,
+                    min_p: 0.0,
                     typical_p: 0.0,
                     do_sample: false,
                     seed: 0,

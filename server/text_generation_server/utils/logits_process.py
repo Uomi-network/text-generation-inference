@@ -17,6 +17,7 @@ from transformers import (
     TopKLogitsWarper,
     TopPLogitsWarper,
     TypicalLogitsWarper,
+    MinPLogitsWarper
 )
 
 mempool = torch.cuda.graph_pool_handle() if torch.cuda.is_available() else None
@@ -29,6 +30,7 @@ class StaticWarper:
         top_k=None,
         top_p=None,
         typical_p=None,
+        min_p=None,
     ):
         self.warpers = []
 
@@ -41,7 +43,9 @@ class StaticWarper:
             self.warpers.append(TopPLogitsWarper(top_p=top_p))
         if typical_p is not None and typical_p < 1.0:
             self.warpers.append(TypicalLogitsWarper(mass=typical_p))
-
+        if min_p is not None and min_p > 0.0:
+            self.warpers.append(MinPLogitsWarper(min_p=min_p))
+        
         self.cuda_graph = None
         self.static_scores = None
         self.static_warped_scores = None
@@ -81,9 +85,10 @@ def static_warper(
     top_k: Optional[int],
     top_p: Optional[float],
     typical_p: Optional[float],
+    min_p: Optional[float] = None,
 ) -> StaticWarper:
     return StaticWarper(
-        temperature=temperature, top_k=top_k, top_p=top_p, typical_p=typical_p
+        temperature=temperature, top_k=top_k, top_p=top_p, typical_p=typical_p, min_p=min_p
     )
 
 

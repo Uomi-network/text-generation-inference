@@ -766,6 +766,7 @@ pub(crate) async fn completions(
                 repetition_penalty: req.repetition_penalty,
                 frequency_penalty: req.frequency_penalty,
                 top_k: None,
+                min_p: None,
                 top_p: req.top_p,
                 typical_p: None,
                 do_sample,

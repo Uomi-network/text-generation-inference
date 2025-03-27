@@ -30,6 +30,7 @@ class NextTokenChooser:
         frequency_penalty: float = 0.0,
         top_k: Optional[int] = None,
         top_p: Optional[float] = None,
+        min_p: Optional[float] = None,
         typical_p: Optional[float] = None,
         do_sample: bool = False,
         seed: int = 0,
@@ -67,7 +68,7 @@ class NextTokenChooser:
         )
         if has_warpers:
             self.static_warper = static_warper(
-                temperature=temperature, top_k=top_k, top_p=top_p, typical_p=typical_p
+                temperature=temperature, top_k=top_k, top_p=top_p, typical_p=typical_p, min_p=min_p
             )
         else:
             self.static_warper = None
@@ -118,6 +119,7 @@ class NextTokenChooser:
             frequency_penalty=pb.frequency_penalty,
             top_k=pb.top_k,
             top_p=pb.top_p,
+            min_p=pb.min_p,
             typical_p=pb.typical_p,
             do_sample=pb.do_sample,
             seed=pb.seed,

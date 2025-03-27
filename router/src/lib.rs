@@ -318,6 +318,11 @@ pub(crate) struct GenerateParameters {
     #[schema(exclusive_minimum = 0, nullable = true, default = "null", example = 10)]
     pub top_k: Option<i32>,
 
+    /// The minimum  probability vocabulary for tokens to keep for top-k-filtering.
+    #[serde(default)]
+    #[schema(exclusive_minimum = 0, nullable = true, default = "null", example = 0.001)]
+    pub min_p: Option<f32>,
+    
     /// Top-p value for nucleus sampling.
     #[serde(default)]
     #[schema(
@@ -414,6 +419,7 @@ fn default_parameters() -> GenerateParameters {
         repetition_penalty: None,
         frequency_penalty: None,
         top_k: None,
+        min_p: None,
         top_p: None,
         typical_p: None,
         do_sample: true,
@@ -989,6 +995,7 @@ impl ChatRequest {
                     repetition_penalty,
                     frequency_penalty,
                     top_k: None,
+                    min_p: None,
                     top_p,
                     typical_p: None,
                     do_sample,

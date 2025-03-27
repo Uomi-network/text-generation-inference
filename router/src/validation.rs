@@ -209,6 +209,7 @@ impl Validation {
             repetition_penalty,
             frequency_penalty,
             top_k,
+            min_p,
             top_p,
             typical_p,
             do_sample,
@@ -271,7 +272,7 @@ impl Validation {
             })
             .unwrap_or(Ok(1.0))?;
 
-        let top_k: u32 = top_k
+            let top_k: u32 = top_k
             .map(|value| {
                 if value <= 0 {
                     return Err(ValidationError::TopK);
@@ -279,6 +280,14 @@ impl Validation {
                 Ok(value as u32)
             })
             .unwrap_or(Ok(0))?;
+        let min_p: f32 = min_p
+            .map(|value| {
+                if value <= 0.0 {
+                    return Err(ValidationError::MinP);
+                }
+                Ok(value as f32)
+            })
+            .unwrap_or(Ok(0.0))?;
 
         if max_new_tokens == Some(0) {
             return Err(ValidationError::NegativeMaxNewTokens);
@@ -393,6 +402,7 @@ impl Validation {
             frequency_penalty,
             top_k,
             top_p,
+            min_p,
             typical_p,
             do_sample,
             seed,
@@ -819,6 +829,8 @@ pub struct ValidParameters {
     pub temperature: f32,
     /// / restricting to the k highest probability elements
     pub top_k: u32,
+    /// / restricting to tokens that have at least probability top_p
+    pub min_p: f32,
     /// / restricting to top tokens summing to prob_cut_off <= prob_cut_off
     pub top_p: f32,
     /// / restricting to top tokens summing to prob_cut_off <= prob_cut_off
@@ -896,6 +908,8 @@ pub enum ValidationError {
     Truncate(usize, usize),
     #[error("`typical_p` must be > 0.0 and < 1.0")]
     TypicalP,
+    #[error("`min_p` must be > 0.0 and < 1.0")]
+    MinP,
     #[error("one of `max_new_tokens` or `truncate` must be set if a fast tokenizer is not in use")]
     UnsetMaxNewTokens,
     #[error("`max_new_tokens` must be strictly positive")]

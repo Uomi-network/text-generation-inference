@@ -173,6 +173,7 @@ impl Client {
                     temperature: 0.9,
                     top_k: 10,
                     top_p: 0.9,
+                    min_p: 0.0,
                     typical_p: 0.9,
                     do_sample: false,
                     seed: 0,

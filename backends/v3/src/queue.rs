@@ -514,6 +514,7 @@ impl From<ValidParameters> for NextTokenChooserParameters {
             temperature: value.temperature,
             top_k: value.top_k,
             top_p: value.top_p,
+            min_p: value.min_p,
             typical_p: value.typical_p,
             do_sample: value.do_sample,
             seed: value.seed,
